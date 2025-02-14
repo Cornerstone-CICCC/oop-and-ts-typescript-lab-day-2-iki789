@@ -20,26 +20,52 @@ interface Student {
 }
 
 class Gradebook<T extends Student> {
-  students = []
+  students: Student[] = [];
 
-  addStudent(student) {
-
+  getStudent(id: number): Student {
+    return this.students.find((student) => {
+      if (student.id === id) {
+        return student;
+      }
+    });
   }
 
-  addGrade(id, grade) {
-
+  addStudent(student: Student): string {
+    this.students.push(student);
+    return `${student.name} added to the gradebook.`;
   }
 
-  getAverageGrade(id) {
-
+  addGrade(id: number, grade: Grade): string {
+    const student = this.getStudent(id);
+    student.grades.push(grade);
+    return `Grade recorded for ${grade.subject}.`;
   }
 
-  getStudentGrades(id) {
+  getAverageGrade(id: number): number {
+    const student = this.getStudent(id);
+    const totalGrade = student.grades.reduce((acc, cur) => {
+      return (acc += cur.grade);
+    }, 0);
 
+    return Math.round(totalGrade / student.grades.length);
   }
 
-  updateSubjectGrade(id, subject, newGrade) {
+  getStudentGrades(id: number): number {
+    const student = this.getStudent(id);
+    return student.grades.reduce((acc, cur) => {
+      return (acc += cur.grade);
+    }, 0);
+  }
 
+  updateSubjectGrade(id: number, subject: string, newGrade: number): string {
+    const student = this.getStudent(id);
+    const studentSub = student.grades.find((grade) => {
+      if (grade.subject === subject) {
+        return grade;
+      }
+    });
+    studentSub.grade = newGrade;
+    return `Updated ${student.name}'s ${studentSub.subject} to ${newGrade}`;
   }
 }
 

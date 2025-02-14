@@ -7,54 +7,34 @@
 // 4. Implement a method `removeProduct` that removes a product from the inventory and returns a confirmation string.
 // 5. Implement a method `getProduct` that retrieves a product by its ID.
 // 6. Implement a method `getAllProducts` that returns the list of all products.
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  stock: number;
+class InventoryManager {
+    products = [];
+    addProduct(product) {
+        this.products.push(product);
+        return `Product ${product} added successfully!`;
+    }
+    updateProduct(id, update) {
+        this.products = this.products.map((product) => product.id === id ? { ...product, ...update } : product);
+        return `Product ${id} updated successfully!`;
+    }
+    getProduct(id) {
+        return this.products.find((product) => {
+            if (product.id === id)
+                return product;
+        });
+    }
+    getAllProducts() {
+        return this.products;
+    }
+    removeProduct(id) {
+        this.products = this.products.filter((product) => product.id !== id);
+        return `Product ${id} removed successfully!`;
+    }
 }
-
-class InventoryManager<T extends Product> {
-  products: Product[] = [];
-
-  addProduct(product: Product): string {
-    this.products.push(product);
-    return `Product ${product} added successfully!`;
-  }
-
-  updateProduct(id: number, update: Partial<Product>) {
-    this.products = this.products.map((product) =>
-      product.id === id ? { ...product, ...update } : product
-    );
-    return `Product ${id} updated successfully!`;
-  }
-
-  getProduct(id: number): Product {
-    return this.products.find((product) => {
-      if (product.id === id) return product;
-    });
-  }
-
-  getAllProducts(): Product[] {
-    return this.products;
-  }
-
-  removeProduct(id: number): string {
-    this.products = this.products.filter((product) => product.id !== id);
-    return `Product ${id} removed successfully!`;
-  }
-}
-
 // Test cases
 const inventory = new InventoryManager();
-
-console.log(
-  inventory.addProduct({ id: 1, name: "Laptop", price: 1000, stock: 5 })
-); // "Product Laptop added successfully!"
-console.log(
-  inventory.addProduct({ id: 2, name: "Mouse", price: 20, stock: 50 })
-); // "Product Mouse added successfully!"
+console.log(inventory.addProduct({ id: 1, name: "Laptop", price: 1000, stock: 5 })); // "Product Laptop added successfully!"
+console.log(inventory.addProduct({ id: 2, name: "Mouse", price: 20, stock: 50 })); // "Product Mouse added successfully!"
 console.log(inventory.updateProduct(1, { price: 900 })); // "Product 1 updated successfully!"
 console.log(inventory.getProduct(1)); // { id: 1, name: "Laptop", price: 900, stock: 5 }
 console.log(inventory.getAllProducts()); // List of all products

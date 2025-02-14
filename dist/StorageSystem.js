@@ -7,51 +7,41 @@
 // 4. Implement a method `getItems` that returns all stored items.
 // 5. Implement a method `findItem` that searches for an item by a given property value.
 // 6. Implement a method `updateItem` that updates an item by its property value.
-
-class MyStorage<T, U> {
-  items: T[] = [];
-
-  addItem(item: T): string {
-    this.items.push(item);
-    if (typeof item === "object") {
-      const name = Object.entries(item).filter(([key]) => key === "name")[0][1];
-      return `User ${name} added.`;
+class MyStorage {
+    items = [];
+    addItem(item) {
+        this.items.push(item);
+        if (typeof item === "object") {
+            const name = Object.entries(item).filter(([key]) => key === "name")[0][1];
+            return `User ${name} added.`;
+        }
+        return `${item} added to storage.`;
     }
-    return `${item} added to storage.`;
-  }
-
-  getItems(): T[] {
-    return this.items;
-  }
-
-  removeItem(id: number): string {
-    const item = this.items.find((item) => item === id);
-    this.items = this.items.filter((item) => item !== id);
-    return `${item} removed from storage.`;
-  }
-
-  findItem(prop: string, val: string | number) {
-    return this.items.find((item) => item[prop] === val);
-  }
-
-  updateItem(prop: string, id: number, update: T): string {
-    const item = this.findItem(prop, id);
-    Object.assign(item, update);
-    return `${id} updated successfully.`;
-  }
+    getItems() {
+        return this.items;
+    }
+    removeItem(id) {
+        const item = this.items.find((item) => item === id);
+        this.items = this.items.filter((item) => item !== id);
+        return `${item} removed from storage.`;
+    }
+    findItem(prop, val) {
+        return this.items.find((item) => item[prop] === val);
+    }
+    updateItem(prop, id, update) {
+        const item = this.findItem(prop, id);
+        Object.assign(item, update);
+        return `${id} updated successfully.`;
+    }
 }
-
 // Test cases
-const numberStrStorage = new MyStorage<number, string>();
-
+const numberStrStorage = new MyStorage();
 console.log(numberStrStorage.addItem(10)); // "10 added to storage."
 console.log(numberStrStorage.addItem(20)); // "20 added to storage."
 console.log(numberStrStorage.getItems()); // [10, 20]
 console.log(numberStrStorage.removeItem(10)); // "10 removed from storage."
 console.log(numberStrStorage.getItems()); // [20]
-
-const userStorage = new MyStorage<{ id: number; name: string }, string>();
-
+const userStorage = new MyStorage();
 console.log(userStorage.addItem({ id: 1, name: "Alice" })); // "User Alice added."
 console.log(userStorage.addItem({ id: 2, name: "Bob" })); // "User Bob added."
 console.log(userStorage.getItems()); // [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }]
